@@ -1,0 +1,172 @@
+@font-face {
+    font-family: "CommitMono";
+    src: url('CommitMono.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+hr {
+    margin: 0.1em auto;
+}
+
+body {
+    background-color: #000000;
+    color: #ffffff;
+    font-family: "CommitMono", monospace;
+    font-size: 1.5rem;
+    margin: auto auto;
+    text-align: center;
+    touch-action: manipulation;
+}
+
+.left {
+    position: absolute;
+    left: 1rem;
+}
+
+.right {
+    position: absolute;
+    right: 1rem;
+}
+
+.top {
+    position: fixed;
+    display: block;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.tab-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    height: 2.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    background-color: #550000;
+    z-index: 999;
+}
+
+.tab {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #550000;
+    color: #ffffff;
+    font-family: "CommitMono", monospace;
+    font-size: 1.19rem;
+    transition: background-color 0.2s;
+    z-index: 1000;
+}
+
+.tab.active {
+    background-color: #dd0000;
+}
+
+.tab:hover {
+    background-color: #880000;
+}
+
+.tab-content {
+    position: fixed;
+    bottom: 8rem;
+    left: 0;
+    margin: auto auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    /* Adjust for scrollbars if needed */
+    overflow-y: auto;
+}
+
+.tab-pane {
+    flex: 1;
+    /* Take up equal space vertically */
+    padding: 20px;
+    /* Add styling for content layout etc. */
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.tab-pane:not(.active) {
+    display: none;
+}
+
+* {
+    touch-action: manipulation;
+}
+
+.game-bar {
+    position: fixed;
+    bottom: 2.25rem;
+    left: 0;
+    height: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    z-index: 999;
+}
+
+.level-number {
+    position: fixed;
+    bottom: 4.5rem;
+    left: 0;
+    height: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    z-index: 999;
+}
+
+.xp-number {
+    position: fixed;
+    bottom: 6.75rem;
+    left: 0;
+    height: 2rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    z-index: 999;
+}
+
+button {
+    touch-action: manipulation;
+    font-size: 1.5rem;
+    border: none;
+    border-radius: 5px;
+    padding: 0px 5px;
+}
+
+button:disabled {
+    background-color: darkgray;
+    color: lightgray;
+}
+
+.button-darkblue {
+    background: darkblue;
+    color: white;
+}
+
+.button-green {
+    background: green;
+    color: white;
+}
+
+.button-darkred {
+    background: darkred;
+    color: white;
+}
+
+.button-red {
+    background: red;
+    color: white;
+}
+
+.box {
+    display: block;
+    border: 1px dashed white;
+}
