@@ -115,6 +115,8 @@ player.maxMana = player.magic * 4;
 player.health = player.maxHealth;
 player.mana = player.maxMana;
 player.attack = player.strength / 2 + player.dexterity / 4 + playerInventory.weapon.value;
+player.defense = playerInventory.shield.value + playerInventory.chest.value + playerInventory.helm.value;
+player.tohit = player.dexterity / 10 * player.level / 10 ;
 
 let healManaCost = 200 / player.magic;
 let currentEnemy = null;
