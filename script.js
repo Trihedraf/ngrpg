@@ -51,14 +51,55 @@ function loadFromLocalStorage() {
   recalculatePoints();
 }
 
+// Function to delete all variables from localStorage
+function deleteFromLocalStorage() {
+  const keysToDelete = [
+    "playerInventory",
+    "player",
+    "currentEnemy",
+    "pointsToAdd",
+    "experienceToLevelUp",
+    "newItemType"
+  ];
+
+  for (const key of keysToDelete) {
+    localStorage.removeItem(key);
+  }
+}
+
+function deleteSave() {
+  if (!confirm("Are you sure you want to delete your save?")) {
+    return;
+  } else {
+    deleteFromLocalStorage();
+    location.reload();
+  }
+}
+
+function clearItem(itemSlot) {
+  if (!confirm("Are you sure you want to delete this item?")) {
+    return;
+  } else {
+    if (playerInventory.hasOwnProperty(itemSlot)) {
+      const item = playerInventory[itemSlot];
+      for (const key in item) {
+        if (key !== "label") {
+          item[key] = "";
+        }
+      }
+    }
+    updateGameDisplay();
+  }
+}
+
 // Variables to store game data
 let playerInventory = {};
-playerInventory.helm = { name: "Helm", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
-playerInventory.chest = { name: "Chest", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
-playerInventory.weapon = { name: "Weapon", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
-playerInventory.shield = { name: "Shield", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
-playerInventory.amulet = { name: "Amulet", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
-playerInventory.ring = { name: "Ring", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
+playerInventory.helm = { label: "Helm", name: "", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
+playerInventory.chest = { label: "Chest", name: "", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
+playerInventory.weapon = { label: "Weapon", name: "", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
+playerInventory.shield = { label: "Shield", name: "", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
+playerInventory.amulet = { label: "Amulet", name: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
+playerInventory.ring = { label: "Ring", name: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
 playerInventory.newItem = null;
 
 let player = {};
@@ -386,7 +427,6 @@ function spawnNewEnemy() {
     defense: randomEnemy.defense,
     experience: randomEnemy.experience
   };
-  enemyAttackDamage = currentEnemy.damage / 4;
   updateGameDisplay();
 }
 
@@ -477,6 +517,7 @@ function updateGameDisplay() {
   /* Display character sheet information */
   let statsContainer = document.getElementById("stats-container");
   statsContainer.innerHTML = `
+      <span class="top"><button id="deleteSaveButton" class="button-red" onclick="deleteSave()">Delete Save</button></span>
       STR: ${Math.trunc(player.strength)}&nbsp
       <button id="strengthButton" onclick="addStat('strength')">+1</button><p />
       DEX: ${Math.trunc(player.dexterity)}&nbsp
@@ -498,27 +539,74 @@ function updateGameDisplay() {
   }
   /* Display inventory information */
   let inventoryContainer = document.getElementById("inventory-container");
-  inventoryContainer.innerHTML = `
-    <span class="box">${playerInventory.helm.prefixname} ${playerInventory.helm.prefixvalue} ${playerInventory.helm.prefixtype}<br />
+  inventoryContainer.innerHTML = "";
+  if (playerInventory.helm.name != "") {
+    inventoryContainer.innerHTML += `
+    <span class="box" onclick="clearItem('helm')">${playerInventory.helm.prefixname} ${playerInventory.helm.prefixvalue} ${playerInventory.helm.prefixtype}<br />
     ${playerInventory.helm.name} ${playerInventory.helm.value} ${playerInventory.helm.type}<br />
     ${playerInventory.helm.suffixname} ${playerInventory.helm.suffixvalue} ${playerInventory.helm.suffixtype}<br /></span>
-    <span class="box">${playerInventory.chest.prefixname} ${playerInventory.chest.prefixvalue} ${playerInventory.chest.prefixtype}<br />
+    `;
+  } else {
+    inventoryContainer.innerHTML += `
+    <span class="box"><br />Helm<br /><br /></span>
+    `;
+  }
+  if (playerInventory.chest.name != "") {
+    inventoryContainer.innerHTML += `
+    <span class="box" onclick="clearItem('chest')">${playerInventory.chest.prefixname} ${playerInventory.chest.prefixvalue} ${playerInventory.chest.prefixtype}<br />
     ${playerInventory.chest.name} ${playerInventory.chest.value} ${playerInventory.chest.type}<br />
     ${playerInventory.chest.suffixname} ${playerInventory.chest.suffixvalue} ${playerInventory.chest.suffixtype}<br /></span>
-    <span class="box">${playerInventory.weapon.prefixname} ${playerInventory.weapon.prefixvalue} ${playerInventory.weapon.prefixtype}<br />
+    `;
+  } else {
+    inventoryContainer.innerHTML += `
+    <span class="box"><br />Chest<br /><br /></span>
+    `;
+  }
+  if (playerInventory.weapon.name != "") {
+    inventoryContainer.innerHTML += `
+    <span class="box" onclick="clearItem('weapon')">${playerInventory.weapon.prefixname} ${playerInventory.weapon.prefixvalue} ${playerInventory.weapon.prefixtype}<br />
     ${playerInventory.weapon.name} ${playerInventory.weapon.value} ${playerInventory.weapon.type}<br />
     ${playerInventory.weapon.suffixname} ${playerInventory.weapon.suffixvalue} ${playerInventory.weapon.suffixtype}<br /></span>
-    <span class="box">${playerInventory.shield.prefixname} ${playerInventory.shield.prefixvalue} ${playerInventory.shield.prefixtype}<br />
+    `;
+  } else {
+    inventoryContainer.innerHTML += `
+    <span class="box"><br />Weapon<br /><br /></span>
+    `;
+  }
+  if (playerInventory.shield.name != "") {
+    inventoryContainer.innerHTML += `
+    <span class="box" onclick="clearItem('shield')">${playerInventory.shield.prefixname} ${playerInventory.shield.prefixvalue} ${playerInventory.shield.prefixtype}<br />
     ${playerInventory.shield.name} ${playerInventory.shield.value} ${playerInventory.shield.type}<br />
     ${playerInventory.shield.suffixname} ${playerInventory.shield.suffixvalue} ${playerInventory.shield.suffixtype}<br /></span>
-    <span class="box">${playerInventory.amulet.prefixname} ${playerInventory.amulet.prefixvalue} ${playerInventory.amulet.prefixtype}<br />
+    `;
+  } else {
+    inventoryContainer.innerHTML += `
+    <span class="box"><br />Shield<br /><br /></span>
+    `;
+  }
+  if (playerInventory.amulet.name != "") {
+    inventoryContainer.innerHTML += `
+    <span class="box" onclick="clearItem('amulet')">${playerInventory.amulet.prefixname} ${playerInventory.amulet.prefixvalue} ${playerInventory.amulet.prefixtype}<br />
     ${playerInventory.amulet.name}<br />
     ${playerInventory.amulet.suffixname} ${playerInventory.amulet.suffixvalue} ${playerInventory.amulet.suffixtype}<br /></span>
-    <span class="box">${playerInventory.ring.prefixname} ${playerInventory.ring.prefixvalue} ${playerInventory.ring.prefixtype}<br />
+    `;
+  } else {
+    inventoryContainer.innerHTML += `
+    <span class="box"><br />Amulet<br /><br /></span>
+    `;
+  }
+  if (playerInventory.ring.name != "") {
+    inventoryContainer.innerHTML += `
+    <span class="box" onclick="clearItem('ring')">${playerInventory.ring.prefixname} ${playerInventory.ring.prefixvalue} ${playerInventory.ring.prefixtype}<br />
     ${playerInventory.ring.name}<br />
     ${playerInventory.ring.suffixname} ${playerInventory.ring.suffixvalue} ${playerInventory.ring.suffixtype}<br /></span>
     `;
-    saveToLocalStorage();
+  } else {
+    inventoryContainer.innerHTML += `
+    <span class="box"><br />Ring<br /><br /></span>
+    `;
+  }
+  saveToLocalStorage();
 }
 
 /* Add stat points */
@@ -534,7 +622,7 @@ function addStat(statName) {
 /* Enemy attack player */
 function enemyAttack() {
   if (Math.random() < 0.5) {
-    player.health -= Math.floor(Math.random() * enemyAttackDamage + 1);
+    player.health -= Math.floor(Math.random() * currentEnemy.damage + 1);
     player.health = Math.max(0, player.health);
     if (player.health <= 0) {
       alert("Dead");
