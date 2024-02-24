@@ -480,7 +480,7 @@ function updateGameDisplay() {
 /* Add stat points */
 function addStat(statName) {
   if (pointsToAdd > 0) {
-    player[statName].value++;
+    player[statName]++;
     pointsToAdd--;
     recalculatePoints();
     updateGameDisplay();
