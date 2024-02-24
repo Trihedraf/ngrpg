@@ -47,6 +47,8 @@ function loadFromLocalStorage() {
   if (storedNewItemType) {
     newItemType = storedNewItemType;
   }
+  updateGameDisplay();
+  recalculatePoints();
 }
 
 // Variables to store game data
@@ -78,6 +80,8 @@ let currentEnemy = null;
 let pointsToAdd = 0;
 let experienceToLevelUp = 100;
 let newItemType = null;
+
+loadFromLocalStorage()
 
 /* Recalculate after stat changes */
 function recalculatePoints() {
@@ -514,6 +518,7 @@ function updateGameDisplay() {
     ${playerInventory.ring.name}<br />
     ${playerInventory.ring.suffixname} ${playerInventory.ring.suffixvalue} ${playerInventory.ring.suffixtype}<br /></span>
     `;
+    saveToLocalStorage();
 }
 
 /* Add stat points */
