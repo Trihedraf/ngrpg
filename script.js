@@ -55,18 +55,21 @@ const enemies = [
     health: 20,
     damage: 10,
     defense: 5,
+    experience: 20
   },
   {
     name: "Zombie",
     health: 40,
     damage: 5,
     defense: 10,
+    experience: 40
   },
   {
     name: "Skeleton Archer",
     health: 10,
     damage: 20,
     defense: 0,
+    experience: 10
   }
 ]
 
@@ -338,6 +341,7 @@ function spawnNewEnemy() {
     health: randomEnemy.health,
     damage: randomEnemy.damage,
     defense: randomEnemy.defense,
+    experience: randomEnemy.experience
   };
   enemyAttackDamage = currentEnemy.damage / 4;
   updateGameDisplay();
@@ -511,8 +515,8 @@ function playerAttack() {
   if (Math.random() > 0.5) {
     currentEnemy.health -= Math.floor(Math.random() * player.attack + 1);
     if (currentEnemy.health <= 0) {
+      gainExperience(currentEnemy.experience);
       currentEnemy = null;
-      gainExperience(100); // Adjust experience gain
       newItemType = pickRandomObject(itemTypes);
       playerInventory.newItem = generateItem(newItemType);
     }
