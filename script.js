@@ -21,20 +21,20 @@ playerInventory.ring = { name: "Ring", prefixname: "", prefixtype: "", prefixval
 playerInventory.newItem = null;
 
 let player = {};
-player.experience = { value: 0 };
-player.level = { value: 1 };
-player.maxLevel = { value: 99 };
-player.strength = { value: 10 };
-player.dexterity = { value: 10 };
-player.magic = { value: 10 };
-player.vitality = { value: 10 };
-player.maxHealth = { value: player.vitality.value * 4 };
-player.maxMana = { value: player.magic.value * 4 };
-player.health = { value: player.maxHealth.value };
-player.mana = { value: player.maxMana.value };
-player.attack = { value: player.strength.value / 2 + player.dexterity.value / 4 + playerInventory.weapon.value };
+player.experience = 0;
+player.level = 1;
+player.maxLevel = 99;
+player.strength = 10;
+player.dexterity = 10;
+player.magic = 10;
+player.vitality = 10;
+player.maxHealth = player.vitality * 4;
+player.maxMana = player.magic * 4;
+player.health = player.maxHealth;
+player.mana = player.maxMana;
+player.attack = player.strength / 2 + player.dexterity / 4 + playerInventory.weapon.value;
 
-let healManaCost = 200 / player.magic.value;
+let healManaCost = 200 / player.magic;
 let currentEnemy = null;
 let pointsToAdd = 0;
 let experienceToLevelUp = 100;
@@ -42,10 +42,10 @@ let newItemType = null;
 
 /* Recalculate after stat changes */
 function recalculatePoints() {
-  player.maxHealth.value = player.vitality.value * 4;
-  player.maxMana.value = player.magic.value * 4;
-  healManaCost = 200 / player.magic.value;
-  player.attack.value = player.strength.value / 2 + player.dexterity.value / 4 + playerInventory.weapon.value;
+  player.maxHealth = player.vitality * 4;
+  player.maxMana = player.magic * 4;
+  healManaCost = 200 / player.magic;
+  player.attack = player.strength / 2 + player.dexterity / 4 + playerInventory.weapon.value;
 }
 
 /* Array of enemies */
@@ -387,13 +387,13 @@ function enableStatButtons() {
 function updateGameDisplay() {
   /* Display game information */
   let hpContainer = document.getElementById("hp");
-  hpContainer.innerHTML = `HP: ${Math.trunc(player.health.value)}/${Math.trunc(player.maxHealth.value)}`;
+  hpContainer.innerHTML = `HP: ${Math.trunc(player.health)}/${Math.trunc(player.maxHealth)}`;
   let mpContainer = document.getElementById("mp");
-  mpContainer.innerHTML = `MP: ${Math.trunc(player.mana.value)}/${Math.trunc(player.maxMana.value)}`;
+  mpContainer.innerHTML = `MP: ${Math.trunc(player.mana)}/${Math.trunc(player.maxMana)}`;
   let levelContainer = document.getElementById("level");
-  levelContainer.innerHTML = `Level: ${player.level.value}`;
+  levelContainer.innerHTML = `Level: ${player.level}`;
   let xpContainer = document.getElementById("xp");
-  xpContainer.innerHTML = `XP: ${Math.trunc(player.experience.value)}/${Math.trunc(experienceToLevelUp)}`;
+  xpContainer.innerHTML = `XP: ${Math.trunc(player.experience)}/${Math.trunc(experienceToLevelUp)}`;
   let gameContainer = document.getElementById("game-container");
   if (playerInventory.newItem) {
     gameContainer.innerHTML = `
@@ -430,13 +430,13 @@ function updateGameDisplay() {
   /* Display character sheet information */
   let statsContainer = document.getElementById("stats-container");
   statsContainer.innerHTML = `
-      STR: ${Math.trunc(player.strength.value)}&nbsp
+      STR: ${Math.trunc(player.strength)}&nbsp
       <button id="strengthButton" onclick="addStat('strength')">+1</button><p />
-      DEX: ${Math.trunc(player.dexterity.value)}&nbsp
+      DEX: ${Math.trunc(player.dexterity)}&nbsp
       <button id="dexterityButton" onclick="addStat('dexterity')">+1</button><p />
-      MAG: ${Math.trunc(player.magic.value)}&nbsp
+      MAG: ${Math.trunc(player.magic)}&nbsp
       <button id="magicButton" onclick="addStat('magic')">+1</button><p />
-      VIT: ${Math.trunc(player.vitality.value)}&nbsp
+      VIT: ${Math.trunc(player.vitality)}&nbsp
       <button id="vitalityButton" onclick="addStat('vitality')">+1</button><p />
       Available Stats: ${pointsToAdd} <p />
   `;
@@ -486,13 +486,13 @@ function addStat(statName) {
 /* Enemy attack player */
 function enemyAttack() {
   if (Math.random() < 0.5) {
-    player.health.value -= Math.floor(Math.random() * enemyAttackDamage + 1);
-    player.health.value = Math.max(0, player.health.value);
-    if (player.health.value <= 0) {
+    player.health -= Math.floor(Math.random() * enemyAttackDamage + 1);
+    player.health = Math.max(0, player.health);
+    if (player.health <= 0) {
       alert("Dead");
       currentEnemy = null;
-      player.health.value = player.maxHealth.value;
-      player.mana.value = player.maxMana.value;
+      player.health = player.maxHealth;
+      player.mana = player.maxMana;
     }
 
     updateGameDisplay();
@@ -509,7 +509,7 @@ function enemyTurn() {
 /* Player attack enemy */
 function playerAttack() {
   if (Math.random() > 0.5) {
-    currentEnemy.health -= Math.floor(Math.random() * player.attack.value + 1); // Random damage based on player attack
+    currentEnemy.health -= Math.floor(Math.random() * player.attack + 1); // Random damage based on player attack
     // Check for defeat
     if (currentEnemy.health <= 0) {
       currentEnemy = null;
@@ -530,10 +530,10 @@ function attackEnemy() {
 
 /* Heal button pushed function */
 function healPlayer() {
-  if (player.mana.value >= healManaCost) {
-    player.mana.value -= healManaCost;
-    player.health.value += player.magic.value / 2; // Adjust healing amount
-    player.health.value = Math.min(player.health.value, player.maxHealth.value);
+  if (player.mana >= healManaCost) {
+    player.mana -= healManaCost;
+    player.health += player.magic / 2; // Adjust healing amount
+    player.health = Math.min(player.health, player.maxHealth);
     enemyTurn();
     updateGameDisplay();
   }
@@ -541,15 +541,15 @@ function healPlayer() {
 
 /* Gain experience and level up if needed */
 function gainExperience(amount) {
-  player.experience.value += amount;
-  if (player.experience.value >= experienceToLevelUp && player.level.value < player.maxLevel.value) {
-    player.level.value++;
+  player.experience += amount;
+  if (player.experience >= experienceToLevelUp && player.level < player.maxLevel) {
+    player.level++;
     pointsToAdd += 5;
-    player.experience.value -= experienceToLevelUp;
+    player.experience -= experienceToLevelUp;
     experienceToLevelUp *= 1.18; // Gradually increase experience needed for next level
     // Optionally, increase player stats like health or attack based on level
-    player.health.value = player.maxHealth.value;
-    player.mana.value = player.maxMana.value;
+    player.health = player.maxHealth;
+    player.mana = player.maxMana;
   }
   updateGameDisplay();
 }
