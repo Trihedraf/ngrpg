@@ -405,8 +405,8 @@ function updateGameDisplay() {
         ${playerInventory.newItem.prefixname} ${playerInventory.newItem.prefixvalue} ${playerInventory.newItem.prefixtype}<br />
         ${playerInventory.newItem.name} ${playerInventory.newItem.value} ${playerInventory.newItem.type}<br />
         ${playerInventory.newItem.suffixname} ${playerInventory.newItem.suffixvalue} ${playerInventory.newItem.suffixtype}<p />
-        <button id="swapItemButton" class="button-green" onclick="swapItem()">Take Item</button>
-        <button id="discardItemButton" class="button-red" onclick="discardItem()">Discard Item</button><p />
+        <button id="swapItemButton" class="button-green" onclick="swapItem()">Equip Item</button>
+        <button id="discardItemButton" class="button-red" onclick="discardItem()">Destroy Item</button><p />
         <button id="attackButton" class="button-darkblue" onclick="attackEnemy()">Attack</button>
         <button class="button-green" onclick="healPlayer()">Heal</button>
         <p /><button class="button-darkred" id="newEnemyButton" onclick="spawnNewEnemy()">New Enemy</button> <br />
