@@ -300,9 +300,24 @@ function pickRandomObject(objects) {
   return objects[randomIndex];
 }
 
+function weightedRandomSelection(items) {
+  const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
+  let randomValue = Math.floor(Math.random() * totalWeight);
+
+  for (const item of items) {
+    randomValue -= item.weight;
+    if (randomValue < 0) {
+      return item;
+    }
+  }
+
+  // If no item is selected due to rounding errors, return the last item
+  return items[items.length - 1];
+}
+
 /* Generate an item */
 function generateItem(type) {
-  const item = items[type][Math.floor(Math.random() * items[type].length)];
+  const item = weightedRandomSelection(items[type]);
 
   let prefix = {
     name: "",
@@ -316,12 +331,12 @@ function generateItem(type) {
   }
   if (Math.random() < 0.5) {
     if (prefixes[type]) {
-      prefix = prefixes[type][Math.floor(Math.random() * prefixes[type].length)];
+      prefix = weightedRandomSelection(prefixes[type])
     }
   }
   if (Math.random() < 0.5) {
     if (suffixes[type]) {
-      suffix = suffixes[type][Math.floor(Math.random() * suffixes[type].length)];
+      suffix = weightedRandomSelection(suffixes[type])
     }
   }
 
