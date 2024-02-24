@@ -10,6 +10,45 @@ tabs.forEach((tab, index) => {
   });
 });
 
+// Function to save all variables to localStorage
+function saveToLocalStorage() {
+  localStorage.setItem("playerInventory", JSON.stringify(playerInventory));
+  localStorage.setItem("player", JSON.stringify(player));
+  localStorage.setItem("currentEnemy", JSON.stringify(currentEnemy));
+  localStorage.setItem("pointsToAdd", pointsToAdd);
+  localStorage.setItem("experienceToLevelUp", experienceToLevelUp);
+  localStorage.setItem("newItemType", newItemType);
+}
+
+// Function to load all variables from localStorage
+function loadFromLocalStorage() {
+  const storedPlayerInventory = localStorage.getItem("playerInventory");
+  const storedPlayer = localStorage.getItem("player");
+  const storedCurrentEnemy = localStorage.getItem("currentEnemy");
+  const storedPointsToAdd = localStorage.getItem("pointsToAdd");
+  const storedExperienceToLevelUp = localStorage.getItem("experienceToLevelUp");
+  const storedNewItemType = localStorage.getItem("newItemType");
+
+  if (storedPlayerInventory) {
+    playerInventory = JSON.parse(storedPlayerInventory);
+  }
+  if (storedPlayer) {
+    player = JSON.parse(storedPlayer);
+  }
+  if (storedCurrentEnemy) {
+    currentEnemy = JSON.parse(storedCurrentEnemy);
+  }
+  if (storedPointsToAdd) {
+    pointsToAdd = parseInt(storedPointsToAdd);
+  }
+  if (storedExperienceToLevelUp) {
+    experienceToLevelUp = parseInt(storedExperienceToLevelUp);
+  }
+  if (storedNewItemType) {
+    newItemType = storedNewItemType;
+  }
+}
+
 // Variables to store game data
 let playerInventory = {};
 playerInventory.helm = { name: "Helm", value: "", type: "", prefixname: "", prefixtype: "", prefixvalue: "", suffixname: "", suffixtype: "", suffixvalue: "" };
