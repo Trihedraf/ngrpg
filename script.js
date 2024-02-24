@@ -325,6 +325,10 @@ function generateItem(type) {
     }
   }
 
+  if (type === "ring" || type === "amulet" && prefix.name === "" && suffix.name === "") {
+    return;
+  }
+
   let generatedItem = {
     name: item.name,
     type: item.type,
