@@ -203,11 +203,20 @@ const suffixes = {
   ]
 }
 
+/* Randomly select an object from an array */
+function pickRandomObject(objects) {
+  // Check if there are any objects in the list
+  if (!objects || objects.length === 0) { return null; }
+  // Generate a random index between 0 and the length of the objects array
+  const randomIndex = Math.floor(Math.random() * objects.length);
+  // Return the object at the random index
+  return objects[randomIndex];
+}
+
+/* Generate an item */
 function generateItem(type) {
-  // Choose random item within that type
   const item = items[type][Math.floor(Math.random() * items[type].length)];
 
-  // Choose random prefix and suffix (if applicable)
   let prefix = {
     name: "",
     type: "",
@@ -244,16 +253,7 @@ function generateItem(type) {
   return generatedItem;
 }
 
-/* Randomly select an object from an array */
-function pickRandomObject(objects) {
-  // Check if there are any objects in the list
-  if (!objects || objects.length === 0) { return null; }
-  // Generate a random index between 0 and the length of the objects array
-  const randomIndex = Math.floor(Math.random() * objects.length);
-  // Return the object at the random index
-  return objects[randomIndex];
-}
-
+/* Replace item with new item */
 function swapItem() {
   switch (newItemType) {
     case "helm":
@@ -509,21 +509,20 @@ function enemyTurn() {
 /* Player attack enemy */
 function playerAttack() {
   if (Math.random() > 0.5) {
-    currentEnemy.health -= Math.floor(Math.random() * player.attack + 1); // Random damage based on player attack
-    // Check for defeat
+    currentEnemy.health -= Math.floor(Math.random() * player.attack + 1);
     if (currentEnemy.health <= 0) {
       currentEnemy = null;
       gainExperience(100); // Adjust experience gain
-      newItemType = pickRandomObject(itemTypes); // Pick random item type
-      playerInventory.newItem = generateItem(newItemType); // Generate new item
+      newItemType = pickRandomObject(itemTypes);
+      playerInventory.newItem = generateItem(newItemType);
     }
   }
 }
 
 /* Attack button pushed function */
 function attackEnemy() {
-  if (!currentEnemy) return; // Prevent attacking if no enemy
-  playerAttack();  // Player attack
+  if (!currentEnemy) return;
+  playerAttack();
   enemyTurn();
   updateGameDisplay();
 }
@@ -546,8 +545,7 @@ function gainExperience(amount) {
     player.level++;
     pointsToAdd += 5;
     player.experience -= experienceToLevelUp;
-    experienceToLevelUp *= 1.18; // Gradually increase experience needed for next level
-    // Optionally, increase player stats like health or attack based on level
+    experienceToLevelUp *= 1.18;
     player.health = player.maxHealth;
     player.mana = player.maxMana;
   }
